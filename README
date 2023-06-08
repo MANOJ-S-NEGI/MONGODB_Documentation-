@@ -1,0 +1,4 @@
+main file contain the connection link for local host:
+>> can change with cloud serve hostlink (refer guide setup)
+>> to axcess form anywhere use Blank ip 0.0.0.0/0 while setup on mongoDB cloud
+>
