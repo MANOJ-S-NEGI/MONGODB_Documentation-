@@ -1,8 +1,9 @@
 from urllib3.util import current_time
-connect_string = "mongodb://localhost:20001"
+
 import pymongo
 from datetime import datetime, date
-
+import os
+connect_string = os.getenv("LOCAL_MONGO_DB_URL")
 
 class Application_log:
     def __init__(self):
@@ -19,6 +20,10 @@ class mongo:
         self.logger = Application_log()
     def mongo_connection(self):
         try:
+            if os.path.isdir("Logs/"):
+                pass
+            else:
+                os.makedirs("Logs/")
             log_file = open("Logs/database_Connection.txt", 'a+')
             client = pymongo.MongoClient(self.connect)
             self.logger.log(log_file," Database connected successfully!!\t")
@@ -32,29 +37,32 @@ class mongo:
 
     def creating_db_collection(self, DATABASE_NAME,COLLECTION_NAME):
         try:
+            if os.path.isdir("Logs/"):
+                pass
+            else:
+                os.makedirs("Logs/")
             Collection_List = self.mongo_connection()[DATABASE_NAME].list_collection_names() ## show collection command
             log_file = open("Logs/database_log.txt", 'a+')
             mongo_connection = self.mongo_connection()
             ListOfAllDatabases = mongo_connection.list_database_names()  ## query give list of present databases
             if DATABASE_NAME not in ListOfAllDatabases:
                 Database = mongo_connection[DATABASE_NAME]
-                self.logger.log(log_file, " %s: database created :" % DATABASE_NAME)
                 Collection = Database[COLLECTION_NAME]  # COLLECTION_NAME is as table name
-                self.logger.log(log_file, " %s: table created by name:" % COLLECTION_NAME)
+                self.logger.log(log_file, "Database and Collection created")
                 log_file.write("Current Date :: %s" % date + "\t" + "Current time:: %s" % current_time + "\t \t"  + "\n")
                 return Collection
 
             elif DATABASE_NAME in ListOfAllDatabases and COLLECTION_NAME not in Collection_List:
                 DATABASE_NAME = mongo_connection[DATABASE_NAME]
                 Collection = DATABASE_NAME[COLLECTION_NAME]  # COLLECTION_NAME is as table name
-                self.logger.log(log_file, " %s: similar db exist in table created by name:" % COLLECTION_NAME)
+                self.logger.log(log_file,  "Database already Exit  New Collection created ")
                 log_file.write("Current Date :: %s" % date + "\t" + "Current time:: %s" % current_time + "\t \t" + "\n")
                 return Collection
 
             elif DATABASE_NAME in ListOfAllDatabases and COLLECTION_NAME in Collection_List:
                 DATABASE_NAME = mongo_connection[DATABASE_NAME]
                 COLLECTION_NAME = DATABASE_NAME[COLLECTION_NAME]  # COLLECTION_NAME is as table name
-                self.logger.log(log_file, " %s: similar db exist in table created by name:" % COLLECTION_NAME)
+                self.logger.log(log_file, "Database and Collection already exist")
                 log_file.write("Current Date :: %s" % date + "\t" + "Current time:: %s" % current_time + "\t \t" + "\n")
                 return COLLECTION_NAME
 
@@ -71,6 +79,10 @@ class mongo:
 
     def insert_one_record(self,DATABASE_NAME, COLLECTION_NAME, RECORD):
         try:
+            if os.path.isdir("Logs/"):
+                pass
+            else:
+                os.makedirs("Logs/")
             log_file = open("Logs/database_log_recordFile.txt", 'a+')
             Record = self.creating_db_collection(DATABASE_NAME,COLLECTION_NAME)
             Record.insert_one(RECORD)
@@ -85,6 +97,10 @@ class mongo:
 
     def Insert_Multiple_Record(self,DATABASE_NAME,COLLECTION_NAME,MULTIPLE_RECORD):
         try:
+            if os.path.isdir("Logs/"):
+                pass
+            else:
+                os.makedirs("Logs/")
             log_file = open("Logs/database_log_recordFile.txt", 'a+')
             Multiple_Record = self.creating_db_collection(DATABASE_NAME, COLLECTION_NAME)
             Multiple_Record.insert_many(MULTIPLE_RECORD)
@@ -139,5 +155,4 @@ multiple_record = [
 
 
 
-
-mongo(connect_string).Insert_Multiple_Record(DATABASE_NAME="DATABASE_LIBRARY_2", COLLECTION_NAME='SELF_2',MULTIPLE_RECORD=multiple_record)
+mongo(connect_string).Insert_Multiple_Record(DATABASE_NAME="DATABASE_LIBRARY_22", COLLECTION_NAME='SELF_3',MULTIPLE_RECORD=multiple_record)
