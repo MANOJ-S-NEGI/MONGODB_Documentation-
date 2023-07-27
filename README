@@ -4,8 +4,7 @@ Dated: JUNE 2023
 
 the main file contains the connection link for the local host and a few major queries.
 
-```
+
 NOTE:
  * can change with the cloud serve host link (refer to guide setup)
  * To access the form anywhere use Blank ip 0.0.0.0/0 while setup on MongoDB cloud
-```
